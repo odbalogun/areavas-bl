@@ -1,5 +1,5 @@
 from flask import make_response, jsonify
-from error_codes import ERROR_CODE_UNAUTHORIZED
+from .error_codes import ERROR_CODE_UNAUTHORIZED
 
 JSON_MIME_TYPE = 'application/json'
 

@@ -7,6 +7,7 @@ from adminlte.admin import AdminLte, admins_store
 from adminlte.views import FaLink
 from config import config, host, port
 import api.routes
+from flask_migrate import Migrate
 
 from api.models import db
 from api.models.user import User
@@ -17,6 +18,7 @@ app = Flask(__name__)
 app.config.from_object(config)
 db.init_app(app)
 db.app = app
+# migrate = Migrate(app, db)
 
 
 # AdminLTE Panel

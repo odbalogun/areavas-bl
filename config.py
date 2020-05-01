@@ -11,13 +11,13 @@ class Config(object):
     DEBUG = False
     TESTING = False
     CSRF_ENABLED = True
-    SECRET_KEY = 'XXXXX' #todo: should be changed for production
-    SQLALCHEMY_DATABASE_URI = "postgresql://{}:{}@database:5432/{}".format(db_user, db_password, db_name)
+    SECRET_KEY = os.environ.get('SECRET_KEY', 'XXXXX')   # todo: should be changed for production
+    SQLALCHEMY_DATABASE_URI = "postgresql://{}:{}@localhost:5432/{}".format(db_user, db_password, db_name)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     SECURITY_URL_PREFIX = "/admin"
     SECURITY_PASSWORD_HASH = "pbkdf2_sha512"
-    SECURITY_PASSWORD_SALT = "YYYYYYY" #todo: should be changed for production
+    SECURITY_PASSWORD_SALT = os.environ.get('SECURITY_PASSWORD_SALT', 'YYYYYYY')    # todo: should be changed for production
 
     SECURITY_LOGIN_URL = "/login/"
     SECURITY_LOGOUT_URL = "/logout/"

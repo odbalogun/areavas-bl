@@ -5,7 +5,7 @@ import time
 from . import db
 
 
-class BaseModel():
+class BaseModel:
     print_filter = ()
     to_json_filter = ()
 
@@ -39,3 +39,6 @@ class BaseModel():
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+
+    def to_naira(self, value):
+        return value/100
