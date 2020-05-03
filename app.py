@@ -5,11 +5,11 @@ from flask_admin import helpers as admin_helpers
 from flasgger import Swagger
 from adminlte.admin import AdminLte, admins_store
 from api.admin.base import FaLink
-from api.admin.views import AdminView
+from api.admin.views import AdminView, SubscriberView, PaymentView, ProductView, CategoryView
 from config import config, host, port
 import api.routes
 
-from api.models import db, AdminUser
+from api.models import db, AdminUser, Subscriber, ProductCategory, Product, PaymentLog
 
 app = Flask(__name__)
 app.config.from_object(config)
@@ -22,7 +22,10 @@ db.app = app
 security = Security(app, admins_store)
 admin = AdminLte(app, skin='green', name='StickerAdmin', short_name="<b>S</b>A", long_name="<b>Sticker</b>Admin")
 admin.add_link(FaLink(name="Documentation", icon_value='fa-book', icon_type="fa", url='/docs/'))
-# admin.add_view(UserView(User, db.session, name="Users", menu_icon_value='fa-users'))
+admin.add_view(ProductView(Product, db.session, name="Products", menu_icon_value='fa-list-alt'))
+admin.add_view(CategoryView(ProductCategory, db.session, name="Product Categories", menu_icon_value='fa-list-ul'))
+admin.add_view(SubscriberView(Subscriber, db.session, name="Subscribers", menu_icon_value='fa-users'))
+admin.add_view(PaymentView(PaymentLog, db.session, name="Payment Logs", menu_icon_value='fa-credit-card'))
 admin.add_view(AdminView(AdminUser, db.session, name="Administrators", menu_icon_value='fa-user-secret'))
 admin.add_link(FaLink(name="Logout", icon_value='fa-sign-out', icon_type="fa", url='/admin/logout'))
 

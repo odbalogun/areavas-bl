@@ -1,22 +1,6 @@
 from api.admin.base import BaseAdminView
 
 
-class UserView(BaseAdminView):
-    column_editable_list = ['first_name', 'last_name', 'age']
-    column_searchable_list = ['first_name', 'last_name', 'age']
-    column_exclude_list = None
-    column_details_exclude_list = None
-    column_filters = ['first_name', 'last_name', 'age', 'created_at', 'updated_at']
-    can_export = True
-    can_view_details = True
-    can_create = True
-    can_edit = True
-    can_delete = True
-    edit_modal = True
-    create_modal = True
-    details_modal = True
-
-
 class AdminView(BaseAdminView):
     required_role = 'superadmin'
     column_display_all_relations = True
@@ -33,3 +17,46 @@ class AdminView(BaseAdminView):
     edit_modal = True
     create_modal = True
     details_modal = True
+
+
+class SubscriberView(BaseAdminView):
+    column_display_all_relations = True
+    can_edit = False
+    can_create = True
+    can_delete = False
+    details_modal = True
+    can_view_details = True
+    can_export = True
+
+
+class ProductView(BaseAdminView):
+    column_display_all_relations = False
+    form_excluded_columns = ['categories', 'payments', 'subscribers']
+    can_edit = False
+    can_create = True
+    can_delete = False
+    details_modal = True
+    can_view_details = True
+    can_export = True
+
+
+class CategoryView(BaseAdminView):
+    column_display_all_relations = False
+    form_excluded_columns = ['payments', 'subscribers']
+    column_labels = {'price': "Price (in kobo)", 'validity': "Validity (in days)"}
+    can_edit = False
+    can_create = True
+    can_delete = False
+    details_modal = True
+    can_view_details = True
+    can_export = True
+
+
+class PaymentView(BaseAdminView):
+    column_display_all_relations = False
+    can_edit = False
+    can_create = True
+    can_delete = False
+    details_modal = True
+    can_view_details = True
+    can_export = True
