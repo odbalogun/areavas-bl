@@ -1,6 +1,18 @@
 from . import db
 from .abc import BaseModel
 from sqlalchemy.sql import func
+import enum
+
+
+class StatusEnum(enum.Enum):
+    pending = "Pending"
+    paid = "Paid"
+    unpaid = "Unpaid"
+
+
+class PaymentModeEnum(enum.Enum):
+    mtn = "MTN"
+    paystack = "Paystack"
 
 
 class PaymentLog(db.Model, BaseModel):
@@ -12,9 +24,10 @@ class PaymentLog(db.Model, BaseModel):
     amount = db.Column(db.Integer)  # measured in kobo
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
     category_id = db.Column(db.Integer, db.ForeignKey('product_categories.id'))
-    payment_mode = db.Column(db.String(50), nullable=False)
+    payment_mode = db.Column(db.Enum(PaymentModeEnum))
     txn_reference = db.Column(db.String(50), nullable=True)
-    status = db.Column(db.String(50), nullable=False)
+    status = db.Column(db.Enum(StatusEnum), default=StatusEnum.pending)
+    note = db.Column(db.Text, nullable=True)
     date_created = db.Column(db.DateTime(timezone=True), default=func.now())
 
     product = db.relationship('Product', backref="payments")
