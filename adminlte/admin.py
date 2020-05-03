@@ -2,7 +2,6 @@ from flask_admin._compat import as_unicode
 from flask_admin import Admin
 from flask_security import SQLAlchemyUserDatastore
 from api.models import db, AdminUser, Role
-from .views import AdminsView
 import hashlib
 import urllib
 
@@ -26,7 +25,6 @@ class AdminLte(Admin):
 
         db.app = app
         db.init_app(app)
-        self.add_view(AdminsView(AdminUser, db.session, name="Adminstrators", menu_icon_value='fa-user-secret'))
 
     def gravatar_image_url(self, email, default_url, size=96):
         return "https://www.gravatar.com/avatar/" \

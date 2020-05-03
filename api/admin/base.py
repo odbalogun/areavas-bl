@@ -44,22 +44,4 @@ class BaseAdminView(FaModelView):
             if current_user.is_authenticated:
                 abort(403)
             else:
-                return redirect(url_for('security.login', next = request.url))
-
-
-class AdminsView(BaseAdminView):
-    required_role = 'superadmin'
-    column_display_all_relations = True
-    column_editable_list = ['email', 'first_name', 'last_name', 'active']
-    column_searchable_list = ['roles.name', 'email', 'first_name', 'last_name', 'active']
-    column_exclude_list = ['password']
-    column_details_exclude_list = ['password']
-    column_filters = ['email', 'first_name', 'last_name', 'active']
-    can_export = True
-    can_view_details = True
-    can_create = True
-    can_edit = True
-    can_delete = True
-    edit_modal = True
-    create_modal = True
-    details_modal = True
+                return redirect(url_for('security.login', next=request.url))

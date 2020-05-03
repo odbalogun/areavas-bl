@@ -4,15 +4,12 @@ from flask_security import Security
 from flask_admin import helpers as admin_helpers
 from flasgger import Swagger
 from adminlte.admin import AdminLte, admins_store
-from adminlte.views import FaLink
+from api.admin.base import FaLink
+from api.admin.views import AdminView
 from config import config, host, port
 import api.routes
-from flask_migrate import Migrate
 
-from api.models import db
-from api.models.user import User
-
-from api.admin.user import UserView
+from api.models import db, AdminUser
 
 app = Flask(__name__)
 app.config.from_object(config)
@@ -23,18 +20,20 @@ db.app = app
 
 # AdminLTE Panel
 security = Security(app, admins_store)
-admin = AdminLte(app, skin = 'green', name = 'FlaskCMS', short_name = "<b>F</b>C", long_name = "<b>Flask</b>CMS")
-admin.add_link(FaLink(name = "Documentation", icon_value = 'fa-book', icon_type = "fa", url = '/docs/'))
-admin.add_view(UserView(User, db.session, name = "Users", menu_icon_value = 'fa-users'))
+admin = AdminLte(app, skin='green', name='StickerAdmin', short_name="<b>S</b>A", long_name="<b>Sticker</b>Admin")
+admin.add_link(FaLink(name="Documentation", icon_value='fa-book', icon_type="fa", url='/docs/'))
+# admin.add_view(UserView(User, db.session, name="Users", menu_icon_value='fa-users'))
+admin.add_view(AdminView(AdminUser, db.session, name="Administrators", menu_icon_value='fa-user-secret'))
+admin.add_link(FaLink(name="Logout", icon_value='fa-sign-out', icon_type="fa", url='/admin/logout'))
 
 
 @security.context_processor
 def security_context_processor():
     return dict(
-        admin_base_template = admin.base_template,
-        admin_view = admin.index_view,
-        h = admin_helpers,
-        get_url = url_for
+        admin_base_template=admin.base_template,
+        admin_view=admin.index_view,
+        h=admin_helpers,
+        get_url=url_for
     )
 
 
@@ -78,4 +77,4 @@ def internal_error(error):
 
 
 if __name__ == '__main__':
-    app.run(host = host, port = port)
+    app.run(host=host, port=port)

@@ -29,18 +29,18 @@ def recreate_db():
 @manager.command
 def create_admin_record():
     with app.app_context():
-        super_admin_role = Role(name = 'superadmin')
-        admin_role = Role(name = 'admin')
+        super_admin_role = Role(name='superadmin')
+        admin_role = Role(name='admin')
         db.session.add(super_admin_role)
         db.session.add(admin_role)
         db.session.commit()
 
         test_user = admins_store.create_user(
-            first_name = 'John',
-            last_name = 'Doe',
-            email = 'admin@admin.com',
-            password = hash_password('admin'),
-            roles = [super_admin_role, admin_role]
+            first_name='John',
+            last_name='Doe',
+            email='admin@admin.com',
+            password=hash_password('admin'),
+            roles=[super_admin_role, admin_role]
         )
         db.session.add(test_user)
         db.session.commit()
