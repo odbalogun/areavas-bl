@@ -20,7 +20,8 @@ class AdminView(BaseAdminView):
 
 
 class SubscriberView(BaseAdminView):
-    column_display_all_relations = True
+    column_display_all_relations = False
+    form_excluded_columns = ['date_created', 'date_updated', 'payments']
     can_edit = False
     can_create = True
     can_delete = False
@@ -54,6 +55,7 @@ class CategoryView(BaseAdminView):
 
 class PaymentView(BaseAdminView):
     column_display_all_relations = False
+    form_excluded_columns = ['date_created']
     can_edit = False
     can_create = True
     can_delete = False

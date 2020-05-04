@@ -5,14 +5,14 @@ import enum
 
 
 class StatusEnum(enum.Enum):
-    active = "Active"
-    expired = "Expired"
-    deactivated = "Deactivated"
+    Active = "Active"
+    Expired = "Expired"
+    Deactivated = "Deactivated"
 
 
 class SubscriptionModeEnum(enum.Enum):
-    mtn = "MTN"
-    paystack = "Paystack"
+    MTN = "MTN"
+    Paystack = "Paystack"
 
 
 class Subscriber(db.Model, BaseModel):
@@ -25,10 +25,10 @@ class Subscriber(db.Model, BaseModel):
     initial_sub_date = db.Column(db.DateTime(timezone=True))
     last_renewed_date = db.Column(db.DateTime(timezone=True))
     expiry_date = db.Column(db.DateTime(timezone=True))
-    status = db.Column(db.Enum(StatusEnum), default=StatusEnum.active)
+    status = db.Column(db.Enum(StatusEnum), default=StatusEnum.Active)
     subscription_mode = db.Column(db.Enum(SubscriptionModeEnum))
     date_created = db.Column(db.DateTime(timezone=True), default=func.now())
-    date_updated = db.Column(db.DateTime(timezone=True))
+    date_updated = db.Column(db.DateTime(timezone=True), default=func.now())
 
     product = db.relationship('Product', backref="subscribers")
     category = db.relationship('ProductCategory', backref="subscribers")

@@ -5,14 +5,14 @@ import enum
 
 
 class StatusEnum(enum.Enum):
-    pending = "Pending"
-    paid = "Paid"
-    unpaid = "Unpaid"
+    Pending = "Pending"
+    Paid = "Paid"
+    Unpaid = "Unpaid"
 
 
 class PaymentModeEnum(enum.Enum):
-    mtn = "MTN"
-    paystack = "Paystack"
+    MTN = "MTN"
+    Paystack = "Paystack"
 
 
 class PaymentLog(db.Model, BaseModel):
@@ -26,7 +26,7 @@ class PaymentLog(db.Model, BaseModel):
     category_id = db.Column(db.Integer, db.ForeignKey('product_categories.id'))
     payment_mode = db.Column(db.Enum(PaymentModeEnum))
     txn_reference = db.Column(db.String(50), nullable=True)
-    status = db.Column(db.Enum(StatusEnum), default=StatusEnum.pending)
+    status = db.Column(db.Enum(StatusEnum), default=StatusEnum.Pending)
     note = db.Column(db.Text, nullable=True)
     date_created = db.Column(db.DateTime(timezone=True), default=func.now())
 
