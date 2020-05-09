@@ -7,6 +7,7 @@ from adminlte.admin import AdminLte, admins_store
 from api.admin.base import FaLink
 from api.admin.views import AdminView, SubscriberView, PaymentView, ProductView, CategoryView
 from config import config, host, port
+from api.utils.extensions import ma
 import api.routes
 
 from api.models import db, AdminUser, Subscriber, ProductCategory, Product, PaymentLog
@@ -15,6 +16,7 @@ app = Flask(__name__)
 app.config.from_object(config)
 db.init_app(app)
 db.app = app
+ma.init_app(app)
 # migrate = Migrate(app, db)
 
 

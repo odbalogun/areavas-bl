@@ -1,0 +1,23 @@
+Returns a list of products
+---
+tags:
+  - products
+responses:
+  200:
+    description: Success
+    schema:
+      $ref: '#/definitions/Product'
+definitions:
+  Product:
+    type: object
+    properties:
+      name:
+        type: string
+      slug:
+        type: string
+      id:
+        type: integer
+    example:
+      name: Stikcer
+      slug: sticker
+      id: 2

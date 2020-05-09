@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask_restful import Api
-from ..resources.user import UserAPI, UserListAPI
+from api.resources.user import UserAPI, UserListAPI
 
 USERS_BLUEPRINT = Blueprint('users', __name__)
-Api(USERS_BLUEPRINT).add_resource(UserListAPI, '/users/')
-Api(USERS_BLUEPRINT).add_resource(UserAPI, '/users/<int:id>/')
+Api(USERS_BLUEPRINT).add_resource(UserListAPI, '/api/users/')
+Api(USERS_BLUEPRINT).add_resource(UserAPI, '/api/users/<int:id>/')
