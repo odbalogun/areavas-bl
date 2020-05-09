@@ -6,12 +6,15 @@ from api.utils.responses import response_success, response_error
 from api.utils.error_codes import ERROR_RESOURCE_DOES_NOT_EXIST
 from api.utils.pagination import paginate
 from api.utils.extensions import ma
+from .category import CategorySchema
 
 
 class ProductSchema(ma.SQLAlchemySchema):
     class Meta:
-        fields = ('id', 'name', 'slug')
+        fields = ('id', 'name', 'slug', 'categories')
         model = Product
+
+    categories = ma.List(ma.Nested(CategorySchema))
 
 
 class ProductSingle(Resource):

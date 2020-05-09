@@ -1,2 +1,2 @@
-from .user import USERS_BLUEPRINT
+from .category import CATEGORY_BLUEPRINT
 from .product import PRODUCT_BLUEPRINT

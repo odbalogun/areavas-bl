@@ -1,0 +1,53 @@
+Returns a category for given id or slug
+---
+tags:
+  - categories
+parameters:
+  - name: cat
+    in: path
+    type: integer/string
+    description: the id or unique slug of the category
+    required: true
+responses:
+  200:
+    description: Success
+    schema:
+      $ref: '#/definitions/Category'
+  400:
+    description: Failure
+    schema:
+      $ref: '#/definitions/Error'
+    examples:
+      1000:
+        code: 1000
+        error: Catgeory does not exist
+definitions:
+  Category:
+    type: object
+    properties:
+      name:
+        type: string
+      slug:
+        type: string
+      id:
+        type: integer
+      product_id:
+        type: integer
+      validity:
+        type: integer
+      price:
+        type: integer
+    example:
+      name: Sticker Weekly
+      slug: sticker-weekly
+      id: 2
+      product_id: 1
+      validity: 7
+      price: 10000
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+      error:
+        type: string

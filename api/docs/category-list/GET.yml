@@ -1,0 +1,32 @@
+Returns a list of categories
+---
+tags:
+  - categories
+responses:
+  200:
+    description: Success
+    schema:
+      $ref: '#/definitions/Category'
+definitions:
+  Category:
+    type: object
+    properties:
+      name:
+        type: string
+      slug:
+        type: string
+      id:
+        type: integer
+      product_id:
+        type: integer
+      validity:
+        type: integer
+      price:
+        type: integer
+    example:
+      name: Sticker Weekly
+      slug: sticker-weekly
+      id: 2
+      product_id: 1
+      validity: 7
+      price: 10000
