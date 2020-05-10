@@ -1,0 +1,67 @@
+Returns subscriber information for the provided product and msisdn
+---
+tags:
+  - subscribers
+parameters:
+  - name: prod
+    in: path
+    type: integer/string
+    description: the id or unique slug of the product
+    required: true
+  - name: msisdn
+    in: path
+    type: integer
+    description: the msisdn to search for
+    required: true
+responses:
+  200:
+    description: Success
+    schema:
+      $ref: '#/definitions/Subscriber'
+  400:
+    description: Failure
+    schema:
+      $ref: '#/definitions/Error'
+    examples:
+      1000:
+        code: 1000
+        error: Product does not exist
+definitions:
+  Subscriber:
+    type: object
+    properties:
+      id:
+        type: integer
+      product_id:
+        type: integer
+      msisdn:
+        type: integer
+      category_id:
+        type: integer
+      initial_sub_date:
+        type: datetime
+      status:
+        type: string
+      subscription_mode:
+        type: string
+      last_renewed_date:
+        type: datetime
+      expiry_date:
+        type: datetime
+    example:
+      id: 25
+      product_id: 2
+      msisdn: 2349060123456
+      category_id: 1
+      initial_sub_date: 2020-05-11T22:08:00+01:00
+      status: Active
+      subscription_mode: MTN
+      last_renewed_date: 2020-05-11T22:08:00+01:00
+      expiry_date: 2020-05-11T22:08:00+01:00
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+      error:
+        type: string

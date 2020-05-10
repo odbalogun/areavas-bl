@@ -4,13 +4,13 @@ from sqlalchemy.sql import func
 import enum
 
 
-class StatusEnum(enum.Enum):
+class StatusEnum(str, enum.Enum):
     Active = "Active"
     Expired = "Expired"
     Deactivated = "Deactivated"
 
 
-class SubscriptionModeEnum(enum.Enum):
+class SubscriptionModeEnum(str, enum.Enum):
     MTN = "MTN"
     Paystack = "Paystack"
 

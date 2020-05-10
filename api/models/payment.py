@@ -4,13 +4,13 @@ from sqlalchemy.sql import func
 import enum
 
 
-class StatusEnum(enum.Enum):
+class StatusEnum(str, enum.Enum):
     Pending = "Pending"
     Paid = "Paid"
     Unpaid = "Unpaid"
 
 
-class PaymentModeEnum(enum.Enum):
+class PaymentModeEnum(str, enum.Enum):
     MTN = "MTN"
     Paystack = "Paystack"
 
