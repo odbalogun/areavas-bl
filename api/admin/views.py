@@ -53,7 +53,7 @@ class CategoryView(BaseAdminView):
     can_export = True
 
 
-class PaymentView(BaseAdminView):
+class TransactionView(BaseAdminView):
     column_display_all_relations = False
     form_excluded_columns = ['date_created']
     can_edit = False
