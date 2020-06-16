@@ -21,7 +21,7 @@ class AdminView(BaseAdminView):
 
 class SubscriberView(BaseAdminView):
     column_display_all_relations = False
-    form_excluded_columns = ['date_created', 'date_updated', 'payments']
+    form_excluded_columns = ['date_created', 'date_updated', 'transactions']
     can_edit = False
     can_create = True
     can_delete = False
@@ -32,7 +32,7 @@ class SubscriberView(BaseAdminView):
 
 class ProductView(BaseAdminView):
     column_display_all_relations = False
-    form_excluded_columns = ['categories', 'payments', 'subscribers']
+    form_excluded_columns = ['categories', 'transactions', 'subscribers']
     can_edit = False
     can_create = True
     can_delete = False
@@ -43,9 +43,9 @@ class ProductView(BaseAdminView):
 
 class CategoryView(BaseAdminView):
     column_display_all_relations = False
-    form_excluded_columns = ['payments', 'subscribers']
+    form_excluded_columns = ['transactions', 'subscribers']
     column_labels = {'price': "Price (in kobo)", 'validity': "Validity (in days)"}
-    can_edit = False
+    can_edit = True
     can_create = True
     can_delete = False
     details_modal = True
