@@ -1,23 +1,23 @@
 from . import db
 from .abc import BaseModel
 from sqlalchemy.sql import func
+from sqlalchemy_utils import ChoiceType
 import enum
 
 
-class StatusEnum(str, enum.Enum):
-    Pending = "Pending"
-    Paid = "Paid"
-    Unpaid = "Unpaid"
+class StatusEnum(enum.Enum):
+    pending = "Pending"
+    paid = "Paid"
 
 
-class PaymentModeEnum(str, enum.Enum):
-    MTN = "MTN"
-    Paystack = "Paystack"
+class PaymentModeEnum(enum.Enum):
+    mtn = "MTN"
+    paystack = "Paystack"
 
 
-class PaymentTypeEnum(str, enum.Enum):
-    SUBSCRIPTION = "SUBSCRIPTION"
-    PURCHASE = "PURCHASE"
+class PaymentTypeEnum(enum.Enum):
+    subscription = "SUBSCRIPTION"
+    purchase = "PURCHASE"
 
 
 class Transaction(db.Model, BaseModel):
@@ -29,16 +29,23 @@ class Transaction(db.Model, BaseModel):
     amount = db.Column(db.Integer)  # measured in kobo
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=True)
     category_id = db.Column(db.Integer, db.ForeignKey('product_categories.id'), nullable=True)
-    payment_mode = db.Column(db.Enum(PaymentModeEnum))
-    payment_type = db.Column(db.Enum(PaymentTypeEnum))
+    payment_mode = db.Column(ChoiceType(PaymentModeEnum))
+    payment_type = db.Column(ChoiceType(PaymentTypeEnum))
     txn_reference = db.Column(db.String(50), nullable=True)
-    status = db.Column(db.Enum(StatusEnum), default=StatusEnum.Pending)
+    status = db.Column(ChoiceType(StatusEnum), default=StatusEnum.pending)
     note = db.Column(db.Text, nullable=True)
     date_created = db.Column(db.DateTime(timezone=True), default=func.now())
 
     product = db.relationship('Product', backref="transactions")
     category = db.relationship('ProductCategory', backref="transactions")
     subscriber = db.relationship('Subscriber', backref="transactions")
+
+    @property
+    def identity_email(self):
+        """
+        Returns an auto-generated email address to serve as a unique identifier with Paystack
+        """
+        return f"{self.msisdn}@payments.barillo.net"
 
 
 class TransactionItem(db.Model, BaseModel):

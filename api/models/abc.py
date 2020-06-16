@@ -16,6 +16,10 @@ class BaseModel:
             if column not in self.print_filter
         })
 
+    def __init__(self, **kwargs):
+        for k, v in kwargs.items():
+            setattr(self, k, v)
+
     @property
     def json(self):
         return {

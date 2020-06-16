@@ -22,6 +22,7 @@ class ProductCategory(db.Model, BaseModel):
     slug = db.Column(db.String(100), unique=True)
     price = db.Column(db.Integer)  # measured in kobo
     validity = db.Column(db.Integer)
+    plan_code = db.Column(db.String(100))  # Paystack subscription code
 
     product = db.relationship('Product', backref="categories")
 
