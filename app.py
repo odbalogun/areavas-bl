@@ -8,6 +8,7 @@ from api.admin.base import FaLink
 from api.admin.views import AdminView, SubscriberView, TransactionView, ProductView, CategoryView
 from config import config, host, port
 from api.utils.extensions import ma
+from pages.views import blueprint as page_blueprint
 import api.routes
 
 from api.models import db, AdminUser, Subscriber, ProductCategory, Product, Transaction
@@ -27,7 +28,7 @@ admin.add_link(FaLink(name="Documentation", icon_value='fa-book', icon_type="fa"
 admin.add_view(ProductView(Product, db.session, name="Products", menu_icon_value='fa-list-alt'))
 admin.add_view(CategoryView(ProductCategory, db.session, name="Product Categories", menu_icon_value='fa-list-ul'))
 admin.add_view(SubscriberView(Subscriber, db.session, name="Subscribers", menu_icon_value='fa-users'))
-admin.add_view(TransactionView(Transaction, db.session, name="Payment Logs", menu_icon_value='fa-credit-card'))
+admin.add_view(TransactionView(Transaction, db.session, name="Transactions", menu_icon_value='fa-credit-card'))
 admin.add_view(AdminView(AdminUser, db.session, name="Administrators", menu_icon_value='fa-user-secret'))
 admin.add_link(FaLink(name="Logout", icon_value='fa-sign-out', icon_type="fa", url='/admin/logout'))
 
@@ -47,7 +48,7 @@ app.url_map.strict_slashes = False
 for blueprint in vars(api.routes).values():
     if isinstance(blueprint, Blueprint):
         app.register_blueprint(blueprint)
-
+app.register_blueprint(page_blueprint)
 
 # Swagger
 app.config['SWAGGER'] = {
