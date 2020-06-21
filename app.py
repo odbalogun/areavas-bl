@@ -6,15 +6,15 @@ from flasgger import Swagger
 from adminlte.admin import AdminLte, admins_store
 from api.admin.base import FaLink
 from api.admin.views import AdminView, SubscriberView, TransactionView, ProductView, CategoryView
-from config import config, host, port
 from api.utils.extensions import ma
 from pages.views import blueprint as page_blueprint
 import api.routes
 
 from api.models import db, AdminUser, Subscriber, ProductCategory, Product, Transaction
+from config import Config
 
 app = Flask(__name__)
-app.config.from_object(config)
+app.config.from_object(Config)
 db.init_app(app)
 db.app = app
 ma.init_app(app)
@@ -83,4 +83,4 @@ def internal_error(error):
 
 
 if __name__ == '__main__':
-    app.run(host=host, port=port)
+    app.run(host=Config.APP_HOST, port=Config.APP_PORT)

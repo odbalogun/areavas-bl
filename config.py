@@ -1,23 +1,19 @@
-import os
-
-host = os.environ.get('APP_HOST', '0.0.0.0')
-port = os.environ.get('APP_PORT', 7100)
-db_name = os.environ.get('DB_NAME', 'testdb')
-db_user = os.environ.get('DB_USER', 'test')
-db_password = os.environ.get('DB_PASSWORD', 'password')
+from decouple import config
 
 
 class Config(object):
-    DEBUG = False
-    TESTING = False
-    CSRF_ENABLED = True
-    SECRET_KEY = os.environ.get('SECRET_KEY', 'XXXXX')   # todo: should be changed for production
-    SQLALCHEMY_DATABASE_URI = "postgresql://{}:{}@localhost:5432/{}".format(db_user, db_password, db_name)
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    APP_HOST = config('APP_HOST')
+    APP_PORT = config('APP_PORT')
+    DEBUG = config('DEBUG')
+    TESTING = config('TESTING')
+    CSRF_ENABLED = config('CSRF_ENABLED')
+    SECRET_KEY = config('SECRET_KEY')
+    SQLALCHEMY_DATABASE_URI = "postgresql://{}:{}@localhost:5432/{}".format(config('DB_USER'), config('DB_PASSWORD'), config('DB_NAME'))
+    SQLALCHEMY_TRACK_MODIFICATIONS = config('SQLALCHEMY_TRACK_MODIFICATIONS', default=False)
 
     SECURITY_URL_PREFIX = "/admin"
     SECURITY_PASSWORD_HASH = "pbkdf2_sha512"
-    SECURITY_PASSWORD_SALT = os.environ.get('SECURITY_PASSWORD_SALT', 'YYYYYYY')    # todo: should be changed for production
+    SECURITY_PASSWORD_SALT = config('SECURITY_PASSWORD_SALT')
 
     SECURITY_LOGIN_URL = "/login/"
     SECURITY_LOGOUT_URL = "/logout/"
@@ -34,15 +30,4 @@ class Config(object):
     SECURITY_CHANGEABLE = True
     SECURITY_SEND_REGISTER_EMAIL = False
 
-
-class ProductionConfig(Config):
-    DEBUG = False
-
-
-class DevelopmentConfig(Config):
-    DEVELOPMENT = True
-    DEBUG = True
-
-
-configs = {"dev": DevelopmentConfig, "prod": ProductionConfig}
-config = configs[os.environ.get('ENV', 'dev')]
+    PAYSTACK_KEY = config('PAYSTACK_KEY')
