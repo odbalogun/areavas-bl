@@ -73,7 +73,27 @@ class Transaction(BaseTransaction):
     user = db.relationship('User', backref="transactions")
 
     def __init__(self, **kwargs):
-        # todo add logic to validate transactions
+        # validate transactions
+        sub = int(kwargs.get('txn_type'))
+        # subscription requires no user_id but requires category_id
+        if sub == 0:
+            if kwargs.get('user_id'):
+                raise ValueError("New subscriber should not have user_id")
+            if not kwargs.get('category_id'):
+                raise ValueError("Subscription requires a category id")
+
+        # renewal requires user_id & category id
+        if sub == 2:
+            if not kwargs.get('category_id') or not kwargs.get('user_id'):
+                raise ValueError("Renewals must include category_id and user_id")
+
+        # purchase requires items
+        if sub == 1:
+            if not kwargs.get('items'):
+                raise ValueError("Invalid purchase request. No items provided")
+        self.items = kwargs.get('items')
+        self.txn_type = kwargs.get('txn_type')
+        self.mode = kwargs.get('mode')
         super().__init__(**kwargs)
 
     @property
@@ -85,6 +105,10 @@ class Transaction(BaseTransaction):
         if val not in STATUS_OPTIONS.keys():
             raise ValueError("Invalid status provided")
         self._status = val
+
+    @property
+    def identity_email(self):
+        return f"{self.msisdn}{self.id}@barrillo.net"
 
 
 class BillingLog(BaseTransaction):

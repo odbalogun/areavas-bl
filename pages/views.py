@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template_string, request, redirect
-from api.models import Transaction
+from api.models import Transaction, Category
 from api.utils.payments import PaystackPay
 from api.utils.formatters import msisdn_formatter
 
@@ -17,44 +17,23 @@ def webpay():
     # check that form has necessary fields
     form = request.form
 
-    if not form.get('msisdn') or not form.get('amount') or not form.get('payment_mode') or not form.get('payment_type'):
+    if not form.get('msisdn') or not form.get('price') or not form.get('mode') or not form.get('txn_type'):
         return render_template_string("Error: Mandatory field not provided")
-
-    # check that payment_type is either subscription or purchase
-    if form.get('payment_type') not in PaymentTypeEnum:
-        return render_template_string("Error: Invalid payment type")
-
-    # check that if it is purchase it contains line items
-    if form.get('payment_type') == PaymentTypeEnum.PURCHASE and not form.get('items'):
-        return render_template_string("Error: No line items provided")
-
-    # check that if it is subscription it does not contain line items
-    if form.get('payment_type') == PaymentTypeEnum.SUBSCRIPTION and form.get('items'):
-        return render_template_string("Error: Cannot provide line items for subscription")
-
-    # check that subscription have a category id & product id
-    if form.get('payment_type') == PaymentTypeEnum.SUBSCRIPTION and (form.get('category_id') or form.get('product_id')):
-        return render_template_string("Error: No category/product provided")
 
     # create Transaction item
     msisdn = msisdn_formatter(form.get('msisdn'))
-    tran = Transaction(msisdn=msisdn, amount=form.get('amount'), payment_mode=form.get('payment_mode'),
-                       payment_type=form.get('payment_type'), category_id=form.get('category_id'),
-                       product_id=form.get('product_id'), subscriber_id=form.get('subscriber_id'))
-
-    for item in form.get('items'):
-        tran.items.append(TransactionItem(item=item))
-
+    tran = Transaction(msisdn=msisdn, price=form.get('price'), mode=form.get('mode'), txn_type=form.get('txn_type'),
+                       category_id=form.get('category_id'), user_id=form.get('user_id'), items=form.get('items'))
     tran.save()
 
     # call Paystack api to create transaction
     paystack = PaystackPay()
     if form.get('category_id'):
-        cat = ProductCategory.query.get(form.get('category_id'))
-        response = paystack.fetch_authorization_url(email=tran.identity_email, amount=form.get('amount'),
+        cat = Category.query.get(form.get('category_id'))
+        response = paystack.fetch_authorization_url(email=tran.identity_email, amount=form.get('price'),
                                                     plan=cat.plan_code)
     else:
-        response = paystack.fetch_authorization_url(email=tran.identity_email, amount=form.get('amount'))
+        response = paystack.fetch_authorization_url(email=tran.identity_email, amount=form.get('price'))
 
     # save transaction information
     data = response.json()
@@ -79,16 +58,20 @@ def process_txn():
 
     if tran:
         # check if value has already been given
-        if tran.status == StatusEnum.Paid:
-            return render_template_string("Success: Transaction has been completed")
+        if tran.status != 0:
+            return render_template_string("Error: This transaction is no longer valid")
         # verify transaction
         paystack = PaystackPay()
         response = paystack.verify_reference_transaction(reference=reference)
 
         if response.status_code == 200:
             # update transaction
-            tran.status = StatusEnum.Paid
+            tran.status = 2
             tran.save()
+
+            # todo add to billing logs
+            # todo add to subscription
+
             # todo find out if there's any api to call on mobile app
             return render_template_string("Success: Transaction has been completed")
         else:
@@ -109,16 +92,19 @@ def process_txn_hook():
 
     if tran:
         # check if value has already been given
-        if tran.status == StatusEnum.Paid:
-            return render_template_string("Success: Transaction has been completed")
+        if tran.status != 0:
+            return render_template_string("Error: This transaction is no longer valid")
         # verify transaction
         paystack = PaystackPay()
         response = paystack.verify_reference_transaction(reference=reference)
 
         if response.status_code == 200:
             # update transaction
-            tran.status = StatusEnum.Paid
+            tran.status = 2
             tran.save()
+
+            # todo add to billing logs
+            # todo add to subscription
             # todo find out if there's any api to call on mobile app
             return render_template_string("Success: Transaction has been completed")
         else:
