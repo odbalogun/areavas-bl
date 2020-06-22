@@ -1,6 +1,6 @@
 import requests
 from requests import Response
-from config import Config
+from config import ConfigObject
 
 
 class PaystackPay(object):
@@ -15,11 +15,11 @@ class PaystackPay(object):
     def fetch_authorization_url(self, **kwargs):
         # always send email and amount
         response: Response = requests.post(self.authorization_url, json=kwargs,
-                                           headers={'Authorization': f'Bearer {Config.PAYSTACK_KEY}'})
+                                           headers={'Authorization': f'Bearer {ConfigObject.PAYSTACK_KEY}'})
         return response
 
     def verify_reference_transaction(self, reference):
         response: Response = requests.get(self.trans_verification_url.format(reference),
-                                          headers={'Authorization': f'Bearer {Config.PAYSTACK_KEY}'})
+                                          headers={'Authorization': f'Bearer {ConfigObject.PAYSTACK_KEY}'})
 
         return response

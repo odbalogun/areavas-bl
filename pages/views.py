@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template_string, request, redirect
-from api.models import Transaction, TransactionItem, ProductCategory
-from api.models.transaction import PaymentTypeEnum, StatusEnum
+from api.models import Transaction
 from api.utils.payments import PaystackPay
 from api.utils.formatters import msisdn_formatter
 

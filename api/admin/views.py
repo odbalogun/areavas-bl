@@ -30,17 +30,6 @@ class SubscriberView(BaseAdminView):
     can_export = True
 
 
-class ProductView(BaseAdminView):
-    column_display_all_relations = False
-    form_excluded_columns = ['categories', 'transactions', 'subscribers']
-    can_edit = False
-    can_create = True
-    can_delete = False
-    details_modal = True
-    can_view_details = True
-    can_export = True
-
-
 class CategoryView(BaseAdminView):
     column_display_all_relations = False
     form_excluded_columns = ['transactions', 'subscribers']

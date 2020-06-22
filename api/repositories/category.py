@@ -1,4 +1,4 @@
-from api.models import ProductCategory
+from api.models import Category
 
 
 class CategoryRepository:
@@ -8,13 +8,9 @@ class CategoryRepository:
         try:
             cat = int(cat)
         except ValueError:
-            return ProductCategory.query.filter_by(slug=cat).first()
-        return ProductCategory.query.get(cat)
+            return Category.query.filter_by(slug=cat).first()
+        return Category.query.get(cat)
 
     @staticmethod
     def get_all():
-        return ProductCategory.query
-
-    @staticmethod
-    def get_all_by_product(prod):
-        return ProductCategory.query.filter_by(product_id=prod).all()
+        return Category.query

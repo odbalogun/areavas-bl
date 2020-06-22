@@ -5,12 +5,12 @@ from flask_admin import helpers as admin_helpers
 from flasgger import Swagger
 from adminlte.admin import AdminLte, admins_store
 from api.admin.base import FaLink
-from api.admin.views import AdminView, SubscriberView, TransactionView, ProductView, CategoryView
+from api.admin.views import AdminView, SubscriberView, TransactionView, CategoryView
 from api.utils.extensions import ma
 from pages.views import blueprint as page_blueprint
 import api.routes
 
-from api.models import db, AdminUser, Subscriber, ProductCategory, Product, Transaction
+from api.models import db, AdminUser, Transaction, User, Category, BillingLog, UnsubscriptionLog, Subscription
 from config import ConfigObject
 
 app = Flask(__name__)
@@ -22,12 +22,15 @@ ma.init_app(app)
 
 
 # AdminLTE Panel
+# todo fix admin portal
 security = Security(app, admins_store)
 admin = AdminLte(app, skin='green', name='StickerAdmin', short_name="<b>S</b>A", long_name="<b>Sticker</b>Admin")
 admin.add_link(FaLink(name="Documentation", icon_value='fa-book', icon_type="fa", url='/docs/'))
-admin.add_view(ProductView(Product, db.session, name="Products", menu_icon_value='fa-list-alt'))
-admin.add_view(CategoryView(ProductCategory, db.session, name="Product Categories", menu_icon_value='fa-list-ul'))
-admin.add_view(SubscriberView(Subscriber, db.session, name="Subscribers", menu_icon_value='fa-users'))
+admin.add_view(CategoryView(Category, db.session, name="Categories", menu_icon_value='fa-list-alt'))
+admin.add_view(SubscriberView(Subscription, db.session, name="Subscribers", menu_icon_value='fa-users'))
+# admin.add_view(AdminView(User, db.session, name="Subscribers", menu_icon_value='fa-users'))
+admin.add_view(TransactionView(BillingLog, db.session, name="Transactions", menu_icon_value='fa-credit-card'))
+admin.add_view(TransactionView(UnsubscriptionLog, db.session, name="Transactions", menu_icon_value='fa-credit-card'))
 admin.add_view(TransactionView(Transaction, db.session, name="Transactions", menu_icon_value='fa-credit-card'))
 admin.add_view(AdminView(AdminUser, db.session, name="Administrators", menu_icon_value='fa-user-secret'))
 admin.add_link(FaLink(name="Logout", icon_value='fa-sign-out', icon_type="fa", url='/admin/logout'))
@@ -53,7 +56,7 @@ app.register_blueprint(page_blueprint)
 # Swagger
 app.config['SWAGGER'] = {
     "swagger_version": "2.0",
-    "title": "FlaskCMS",
+    "title": "Sticker",
     "specs": [
         {
             "version": None,
@@ -83,4 +86,4 @@ def internal_error(error):
 
 
 if __name__ == '__main__':
-    app.run(host=Config.APP_HOST, port=Config.APP_PORT)
+    app.run(host=ConfigObject.APP_HOST, port=ConfigObject.APP_PORT)
