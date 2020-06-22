@@ -11,10 +11,10 @@ from pages.views import blueprint as page_blueprint
 import api.routes
 
 from api.models import db, AdminUser, Subscriber, ProductCategory, Product, Transaction
-from config import Config
+from config import ConfigObject
 
 app = Flask(__name__)
-app.config.from_object(Config)
+app.config.from_object(ConfigObject)
 db.init_app(app)
 db.app = app
 ma.init_app(app)

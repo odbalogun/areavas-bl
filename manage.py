@@ -3,13 +3,13 @@ from flask_security import Security
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 from flask_security.utils import hash_password
-from config import config
+from config import ConfigObject
 
 from api.models import db
 from adminlte.admin import admins_store, Role
 
 app = Flask(__name__)
-app.config.from_object(config)
+app.config.from_object(ConfigObject)
 db.init_app(app)
 
 Security(app, admins_store)

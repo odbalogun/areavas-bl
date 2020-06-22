@@ -1,7 +1,7 @@
 from decouple import config
 
 
-class Config(object):
+class ConfigObject(object):
     APP_HOST = config('APP_HOST')
     APP_PORT = config('APP_PORT')
     DEBUG = config('DEBUG')
