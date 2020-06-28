@@ -4,6 +4,28 @@ import time
 
 from . import db
 
+STATUS_OPTIONS = {
+    0: "active",
+    1: "expired"
+}
+
+MODE_OPTIONS = {
+    0: "paystack",
+    1: "mtn"
+}
+
+PAYMENT_STATUS_OPTIONS = {
+    0: "pending",
+    1: "paid",
+    2: "failed"
+}
+
+TYPE_OPTIONS = {
+    0: "subscription",
+    1: "purchase",
+    2: "renewal"
+}
+
 
 class BaseModel:
     print_filter = ()

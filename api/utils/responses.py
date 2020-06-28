@@ -24,12 +24,12 @@ def json_response(data = None, status = 200, headers = None):
     return make_response(payload, status, headers)
 
 
-def response_success(data = None, status = 200):
-    return json_response(data = data, status = status)
+def response_success(data=None, status=200):
+    return json_response(data=data, status=status)
 
 
-def response_error(code, message, status = 400):
-    return json_response(data = error(code, message), status = status)
+def response_error(code, message, status=400):
+    return json_response(data=error(code, message), status=status)
 
 
 def response_not_authorized():

@@ -1,23 +1,6 @@
 from . import db
-from .abc import BaseModel
+from .abc import BaseModel, PAYMENT_STATUS_OPTIONS, MODE_OPTIONS, TYPE_OPTIONS
 from sqlalchemy.sql import func
-
-STATUS_OPTIONS = {
-    0: "pending",
-    1: "paid",
-    2: "failed"
-}
-
-MODE_OPTIONS = {
-    0: "paystack",
-    1: "mtn"
-}
-
-TYPE_OPTIONS = {
-    0: "subscription",
-    1: "purchase",
-    2: "renewal"
-}
 
 
 class BaseTransaction(db.Model, BaseModel):
@@ -98,11 +81,11 @@ class Transaction(BaseTransaction):
 
     @property
     def status(self):
-        return STATUS_OPTIONS.get(self._status)
+        return PAYMENT_STATUS_OPTIONS.get(self._status)
 
     @status.setter
     def status(self, val):
-        if val not in STATUS_OPTIONS.keys():
+        if val not in PAYMENT_STATUS_OPTIONS.keys():
             raise ValueError("Invalid status provided")
         self._status = val
 

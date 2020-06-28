@@ -1,17 +1,7 @@
 from . import db
-from .abc import BaseModel
+from .abc import BaseModel, STATUS_OPTIONS, MODE_OPTIONS
 from sqlalchemy.sql import func
-
-
-STATUS_OPTIONS = {
-    0: "active",
-    1: "expired"
-}
-
-MODE_OPTIONS = {
-    0: "paystack",
-    1: "mtn"
-}
+from sqlalchemy.orm import backref
 
 
 class Subscription(db.Model, BaseModel):
@@ -25,6 +15,8 @@ class Subscription(db.Model, BaseModel):
     expiry_date = db.Column(db.DateTime(timezone=True))
     _status = db.Column(db.Integer, default=0)
     _mode = db.Column(db.Integer, default=0)
+
+    user = db.relationship('User', backref=backref('subscription', uselist=False))
 
     @property
     def status(self):
@@ -55,6 +47,8 @@ class UnsubscriptionLog(db.Model, BaseModel):
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
     date_created = db.Column(db.DateTime(timezone=True), default=func.now())
     _mode = db.Column(db.Integer, default=0)
+
+    user = db.relationship('User', backref='unsubscription_logs')
 
     @property
     def mode(self):

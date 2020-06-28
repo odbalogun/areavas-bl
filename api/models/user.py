@@ -42,11 +42,24 @@ class User(db.Model, BaseModel):
     email = db.Column(db.String(255), nullable=True)
     msisdn = db.Column(db.String(15), nullable=False, unique=True)
     date_created = db.Column(db.DateTime(timezone=True), default=func.now())
-    # todo add relationship for subscription
-    # todo create a status property that returns user's subscription state
 
     def __str__(self):
         return self.msisdn
 
     def __repr__(self):
         return self.msisdn
+
+    @classmethod
+    def create_or_get(cls, **kwargs):
+        instance = cls.query.filter(**kwargs).first()
+        if instance:
+            return instance
+        instance = cls(**kwargs)
+        instance.save()
+        return instance
+
+    @property
+    def status(self):
+        if not self.subscription:
+            return
+        return self.subscription.status
