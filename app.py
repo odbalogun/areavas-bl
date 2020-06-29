@@ -5,12 +5,12 @@ from flask_admin import helpers as admin_helpers
 from flasgger import Swagger
 from adminlte.admin import AdminLte, admins_store
 from api.admin.base import FaLink
-from api.admin.views import AdminView, SubscriberView, TransactionView, CategoryView
+from api.admin.views import AdminView, SubscriberView, CategoryView, BillingView, UnsubscriptionView
 from api.utils.extensions import ma
 from pages.views import blueprint as page_blueprint
 import api.routes
 
-from api.models import db, AdminUser, Transaction, User, Category, BillingLog, UnsubscriptionLog, Subscription
+from api.models import db, AdminUser, Category, BillingLog, UnsubscriptionLog, Subscription
 from config import ConfigObject
 
 app = Flask(__name__)
@@ -29,9 +29,8 @@ admin.add_link(FaLink(name="Documentation", icon_value='fa-book', icon_type="fa"
 admin.add_view(CategoryView(Category, db.session, name="Categories", menu_icon_value='fa-list-alt'))
 admin.add_view(SubscriberView(Subscription, db.session, name="Subscribers", menu_icon_value='fa-users'))
 # admin.add_view(AdminView(User, db.session, name="Subscribers", menu_icon_value='fa-users'))
-admin.add_view(TransactionView(BillingLog, db.session, name="Transactions", menu_icon_value='fa-credit-card'))
-admin.add_view(TransactionView(UnsubscriptionLog, db.session, name="Transactions", menu_icon_value='fa-credit-card'))
-admin.add_view(TransactionView(Transaction, db.session, name="Transactions", menu_icon_value='fa-credit-card'))
+admin.add_view(BillingView(BillingLog, db.session, name="Billing Logs", menu_icon_value='fa-credit-card'))
+admin.add_view(UnsubscriptionView(UnsubscriptionLog, db.session, name="Unsubscription Logs", menu_icon_value='fa-list'))
 admin.add_view(AdminView(AdminUser, db.session, name="Administrators", menu_icon_value='fa-user-secret'))
 admin.add_link(FaLink(name="Logout", icon_value='fa-sign-out', icon_type="fa", url='/admin/logout'))
 

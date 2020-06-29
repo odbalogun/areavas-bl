@@ -13,5 +13,5 @@ class Category(db.Model, BaseModel):
     validity = db.Column(db.Integer)
     paystack_plan_id = db.Column(db.String(100))  # Paystack subscription code
 
-    def __repr__(self):
+    def __str__(self):
         return self.name

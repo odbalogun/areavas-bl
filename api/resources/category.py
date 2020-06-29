@@ -10,7 +10,7 @@ from api.utils.extensions import ma
 
 class CategorySchema(ma.SQLAlchemySchema):
     class Meta:
-        fields = ('id', 'product_id', 'name', 'slug', 'price', 'validity')
+        fields = ('id', 'name', 'slug', 'paystack_plan_id', 'paystack_price', 'vas_price', 'validity')
         model = Category
 
 

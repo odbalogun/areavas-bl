@@ -46,12 +46,9 @@ class User(db.Model, BaseModel):
     def __str__(self):
         return self.msisdn
 
-    def __repr__(self):
-        return self.msisdn
-
     @classmethod
     def create_or_get(cls, **kwargs):
-        instance = cls.query.filter(**kwargs).first()
+        instance = cls.query.filter_by(**kwargs).first()
         if instance:
             return instance
         instance = cls(**kwargs)

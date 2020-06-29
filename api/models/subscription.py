@@ -34,6 +34,7 @@ class Subscription(db.Model, BaseModel):
 
     @mode.setter
     def mode(self, val):
+        print("here: "+val)
         if val not in MODE_OPTIONS.keys():
             raise ValueError("Invalid subscription mode provided")
         self._mode = val
