@@ -5,25 +5,25 @@ import time
 from . import db
 
 STATUS_OPTIONS = {
-    0: "active",
-    1: "expired"
+    "active": 0,
+    "expired": 1
 }
 
 MODE_OPTIONS = {
-    0: "paystack",
-    1: "mtn"
+    "paystack": 0,
+    "mtn": 1
 }
 
 PAYMENT_STATUS_OPTIONS = {
-    0: "pending",
-    1: "paid",
-    2: "failed"
+    "pending": 0,
+    "paid": 1,
+    "failed": 2
 }
 
 TYPE_OPTIONS = {
-    0: "subscription",
-    1: "purchase",
-    2: "renewal"
+    "subscription": 0,
+    "purchase": 1,
+    "renewal": 2
 }
 
 

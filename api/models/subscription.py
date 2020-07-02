@@ -20,24 +20,29 @@ class Subscription(db.Model, BaseModel):
 
     @property
     def status(self):
-        return STATUS_OPTIONS.get(self._status)
+        try:
+            return list(STATUS_OPTIONS.keys())[list(STATUS_OPTIONS.values()).index(self._status)]
+        except ValueError:
+            return None
 
     @status.setter
     def status(self, val):
         if val not in STATUS_OPTIONS.keys():
             raise ValueError("Invalid status provided")
-        self._status = val
+        self._status = STATUS_OPTIONS[val]
 
     @property
     def mode(self):
-        return MODE_OPTIONS.get(self._mode)
+        try:
+            return list(MODE_OPTIONS.keys())[list(MODE_OPTIONS.values()).index(self._mode)]
+        except ValueError:
+            return None
 
     @mode.setter
     def mode(self, val):
-        print("here: "+val)
         if val not in MODE_OPTIONS.keys():
             raise ValueError("Invalid subscription mode provided")
-        self._mode = val
+        self._mode = MODE_OPTIONS[val]
 
 
 class UnsubscriptionLog(db.Model, BaseModel):
@@ -53,10 +58,13 @@ class UnsubscriptionLog(db.Model, BaseModel):
 
     @property
     def mode(self):
-        return MODE_OPTIONS.get(self._mode)
+        try:
+            return list(MODE_OPTIONS.keys())[list(MODE_OPTIONS.values()).index(self._mode)]
+        except ValueError:
+            return None
 
     @mode.setter
     def mode(self, val):
         if val not in MODE_OPTIONS.keys():
             raise ValueError("Invalid subscription mode provided")
-        self._mode = val
+        self._mode = MODE_OPTIONS[val]

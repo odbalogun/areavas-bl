@@ -1,6 +1,7 @@
 from flask_restful import Resource, reqparse
 from flasgger import swag_from
 from api.models import Transaction, User, Subscription, Category, BillingLog, UnsubscriptionLog
+from api.models.abc import PAYMENT_STATUS_OPTIONS, MODE_OPTIONS
 from api.utils.extensions import ma
 from api.utils.responses import response_success, response_error
 from api.utils.formatters import msisdn_formatter
@@ -23,8 +24,8 @@ class SubscribeAction(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('price', type=int, required=True, help='Price not provided', location='json')
-        self.parser.add_argument('mode', type=int, required=False, default=0, location='json')
-        self.parser.add_argument('txn_type', type=int, required=False, default=0, location='json')
+        self.parser.add_argument('mode', type=str, required=False, default='paystack', location='json')
+        self.parser.add_argument('txn_type', type=str, required=False, default='subscription', location='json')
         self.parser.add_argument('msisdn', type=str, required=True, location='json')
         self.parser.add_argument('user_id', type=int, required=False, default=None, location='json')
         self.parser.add_argument('category_id', type=int, required=True, location='json')
@@ -41,7 +42,7 @@ class SubscribeAction(Resource):
         # check that category exists
         if not Category.query.get(tran.category_id):
             return response_error(404, "Specified category does not exist", 404)
-        tran.status = 1
+        tran.status = 'paid'
         tran.msisdn = msisdn_formatter(tran.msisdn)
         tran.save()
 
@@ -54,7 +55,7 @@ class SubscribeAction(Resource):
         else:
             user = User.create_or_get(msisdn=tran.msisdn)
         if user.subscription:
-            user.subscription.mode = tran.mode
+            user.subscription.mode = args['mode']
             user.subscription.category_id = tran.category_id
             user.subscription.date_updated = datetime.datetime.now()
             user.subscription.expiry_date = datetime.datetime.now() + datetime.timedelta(days=tran.category.validity)
@@ -66,9 +67,10 @@ class SubscribeAction(Resource):
 
         # add billing log
         bill = BillingLog(user_id=user.id, category_id=tran.category_id, validity=tran.category.validity,
-                          price=tran.price, mode=tran.mode, txn_type=tran.txn_type)
+                          price=tran.price, mode=args['mode'], txn_type=args['txn_type'])
         bill.save()
-        return response_success(schema.dump(tran))
+        # return response_success(schema.dump(tran))
+        return response_success({'message': "The msisdn has been successfully subscribed"})
 
 
 class UnsubscribeAction(Resource):

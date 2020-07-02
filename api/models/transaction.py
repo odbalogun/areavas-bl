@@ -24,23 +24,29 @@ class BaseTransaction(db.Model, BaseModel):
 
     @property
     def mode(self):
-        return MODE_OPTIONS.get(self._mode)
+        try:
+            return list(MODE_OPTIONS.keys())[list(MODE_OPTIONS.values()).index(self._mode)]
+        except ValueError:
+            return None
 
     @mode.setter
     def mode(self, val):
         if val not in MODE_OPTIONS.keys():
             raise ValueError("Invalid mode provided")
-        self._mode = val
+        self._mode = MODE_OPTIONS[val]
 
     @property
     def txn_type(self):
-        return TYPE_OPTIONS.get(self._type)
+        try:
+            return list(TYPE_OPTIONS.keys())[list(TYPE_OPTIONS.values()).index(self._type)]
+        except ValueError:
+            return None
 
     @txn_type.setter
     def txn_type(self, val):
         if val not in TYPE_OPTIONS.keys():
             raise ValueError("Invalid transaction type provided")
-        self._type = val
+        self._type = TYPE_OPTIONS[val]
 
 
 class Transaction(BaseTransaction):
@@ -57,21 +63,21 @@ class Transaction(BaseTransaction):
 
     def __init__(self, **kwargs):
         # validate transactions
-        sub = int(kwargs.get('txn_type'))
+        sub = kwargs.get('txn_type')
         # subscription requires no user_id but requires category_id
-        if sub == 0:
+        if sub == 'subscription':
             if kwargs.get('user_id'):
                 raise ValueError("New subscriber should not have user_id")
             if not kwargs.get('category_id'):
                 raise ValueError("Subscription requires a category id")
 
         # renewal requires user_id & category id
-        if sub == 2:
+        if sub == 'renewal':
             if not kwargs.get('category_id') or not kwargs.get('user_id'):
                 raise ValueError("Renewals must include category_id and user_id")
 
         # purchase requires items
-        if sub == 1:
+        if sub == 'purchase':
             if not kwargs.get('items'):
                 raise ValueError("Invalid purchase request. No items provided")
         self.items = kwargs.get('items')
@@ -81,13 +87,16 @@ class Transaction(BaseTransaction):
 
     @property
     def status(self):
-        return PAYMENT_STATUS_OPTIONS.get(self._status)
+        try:
+            return list(PAYMENT_STATUS_OPTIONS.keys())[list(PAYMENT_STATUS_OPTIONS.values()).index(self._status)]
+        except ValueError:
+            return None
 
     @status.setter
     def status(self, val):
         if val not in PAYMENT_STATUS_OPTIONS.keys():
             raise ValueError("Invalid status provided")
-        self._status = val
+        self._status = PAYMENT_STATUS_OPTIONS[val]
 
     @property
     def identity_email(self):
