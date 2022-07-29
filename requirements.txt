@@ -36,7 +36,7 @@ MarkupSafe==1.1.1
 marshmallow==3.5.2
 marshmallow-sqlalchemy==0.23.0
 mccabe==0.6.1
-mistune==0.8.4
+mistune==2.0.3
 passlib==1.7.2
 psycopg2==2.7.1
 pylint==2.5.3
